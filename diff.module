@@ -36,8 +36,9 @@ define('DIFF_SORT_CUSTOM', '-1');
  */
 function diff_available_states($entity_type = NULL) {
   $states = array(
+    // Right now there is only one render mode.
+    // See https://github.com/backdrop-contrib/diff/issues/20
     'raw' => t('Standard'),
-    'raw_plain' => t('Marked down'),
   );
 
   return $states;
