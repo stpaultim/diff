@@ -89,8 +89,8 @@ function _node_entity_diff_additional_options_account($label, $old_author, $new_
   );
   foreach ($context['states'] as $state) {
     $row['#states'][$state] = array(
-      '#old' => array($old_author ? format_username($old_author) : t('Deleted user')),
-      '#new' => array($new_author ? format_username($new_author) : t('Deleted user')),
+      '#old' => array($old_author ? user_format_name($old_author) : t('Deleted user')),
+      '#new' => array($new_author ? user_format_name($new_author) : t('Deleted user')),
     );
   }
   return $row;
