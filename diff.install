@@ -153,5 +153,5 @@ function diff_update_1002() {
 function diff_update_1003() {
   // The other display mode "raw_plain" was removed.
   config_set('diff.settings', 'diff_default_state.node', 'raw');
-  config_set('diff.settings', 'diff_default_state.node', 'raw');
+  config_set('diff.settings', 'diff_default_state.user', 'raw');
 }
