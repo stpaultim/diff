@@ -188,7 +188,6 @@ function diff_admin_paths_alter(&$paths) {
  */
 function diff_node_revision_access($node, $op = 'view') {
   $may_revision_this_type = config_get("node.type.$node->type", 'settings.diff_enable_revisions_page_node') || user_access('view revisions');
-  $account = $GLOBALS['user'];
   return $may_revision_this_type && _node_revision_access($node, $op);
 }
 
@@ -279,6 +278,7 @@ function diff_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function diff_block_view($delta) {
+  /* @var Node $node */
   if ($delta === 'inline' && user_access('view revisions') && ($node = menu_get_object()) && arg(2) !== 'edit') {
     $enabled_types = config_get('diff.settings', 'diff_show_diff_inline_node_bundles');
     if (!empty($enabled_types[$node->type])) {
@@ -291,6 +291,7 @@ function diff_block_view($delta) {
       return $block;
     }
   }
+  return NULL;
 }
 
 /**
@@ -510,8 +511,10 @@ function diff_get_rows($a, $b, $show_header = FALSE, &$line_stats = NULL) {
   }
   $formatter = new BackdropDiffFormatter();
   // Header is the line counter.
-  $formatter->show_header = $show_header;
-  $formatter->line_stats = &$line_stats;
+  // @todo: The core BackdropDiffFormatter does not allow setting these private
+  //        property values directly.
+  //$formatter->show_header = $show_header;
+  //$formatter->line_stats = &$line_stats;
   $diff = new Diff($a, $b);
   return $formatter->format($diff);
 }
@@ -554,7 +557,7 @@ function diff_inline_form($form, $form_state, $node, $revisions) {
   foreach ($revisions as $revision) {
     $form['revision']['#options'][$revision->vid] = t('@revision by @name', array(
       '@revision' => format_date($revision->timestamp, 'short'),
-      '@name' => format_username($revision),
+      '@name' => user_format_name($revision),
     ));
   }
   $form['submit'] = array(
@@ -567,7 +570,7 @@ function diff_inline_form($form, $form_state, $node, $revisions) {
 }
 
 /**
- * AHAH callback for rendering the inline diff of a node.
+ * AJAX callback for rendering the inline diff of a node.
  */
 function diff_inline_ajax($form, $form_state) {
   module_load_include('inc', 'diff', 'diff.pages');
@@ -670,6 +673,7 @@ function node_entity_diff_options($entity_type) {
     }
     return $options;
   }
+  return NULL;
 }
 
 /**
@@ -705,8 +709,8 @@ function user_entity_diff_options($entity_type) {
     );
     return $options;
   }
+  return NULL;
 }
-
 
 /**
  * Implements hook_config_info().

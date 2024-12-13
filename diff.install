@@ -130,7 +130,7 @@ function diff_update_last_removed() {
 }
 
 /**
- * Set default values for config settings
+ * Set default values for config settings.
  */
 function diff_update_1002() {
   $config = config('diff.settings');
@@ -145,4 +145,13 @@ function diff_update_1002() {
     }
   }
   $config->save();
+}
+
+/**
+ * Set default state display mode.
+ */
+function diff_update_1003() {
+  // The other display mode "raw_plain" was removed.
+  config_set('diff.settings', 'diff_default_state.node', 'raw');
+  config_set('diff.settings', 'diff_default_state.node', 'raw');
 }

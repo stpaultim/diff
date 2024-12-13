@@ -32,7 +32,7 @@ class BackdropDiffInline {
           $output .= implode('', $chunk->closing);
           break;
         case 'delete':
-          foreach ($chunk->orig as $i => $piece) {
+          foreach ($chunk->orig as $piece) {
             if (strpos($piece, '<') === 0 && backdrop_substr($piece, backdrop_strlen($piece) - 1) === '>') {
               $output .= $piece;
             }
@@ -43,7 +43,7 @@ class BackdropDiffInline {
           break;
         default:
           $chunk->closing = $this->process_chunk($chunk->closing);
-          foreach ($chunk->closing as $i => $piece) {
+          foreach ($chunk->closing as $piece) {
             if ($piece === ' ' || (strpos($piece, '<') === 0 && backdrop_substr($piece, backdrop_strlen($piece) - 1) === '>' && backdrop_strtolower(backdrop_substr($piece, 1, 3)) != 'img')) {
               $output .= $piece;
             }

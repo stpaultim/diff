@@ -71,6 +71,7 @@ function diff_node_revisions($form, $form_state, $node) {
     $delete_permission = TRUE;
   }
 
+  $revision_ids = array();
   foreach ($revisions as $revision) {
     $operations = array();
     $revision_ids[$revision->vid] = '';
@@ -246,9 +247,6 @@ function diff_diffs_show(Node $node, $old_vid, $new_vid, $state = '') {
 
   $links = array();
   foreach (diff_available_states('node') as $alternative_state => $label) {
-    if ($alternative_state == $state) {
-      // @todo: Should we show both or just alternatives?
-    }
     $links[$alternative_state] = array(
       'title' => $label,
       'href' => "node/{$node->nid}/revisions/view/{$old_vid}/{$new_vid}" . ($alternative_state == $default_state ? '' : '/' . str_replace('_', '-', $alternative_state)),
