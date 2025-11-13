@@ -156,13 +156,6 @@ function diff_menu() {
 }
 
 /**
- * Implements hook_menu_alter().
- */
-function diff_menu_alter(&$callbacks) {
-  // Do not override core revisions routes. Intentionally left minimal.
-}
-
-/**
  * Implements hook_admin_paths_alter().
  */
 function diff_admin_paths_alter(&$paths) {
@@ -534,7 +527,7 @@ function diff_inline_form($form, $form_state, $node, $revisions) {
     '#type' => 'value',
     '#value' => $node,
   );
-  $form['revision'] = array(
+  $form['compare'] = array(
     '#type' => 'select',
     '#options' => array(0 => t('- No highlighting -')),
     '#default_value' => ((arg(2) === 'revisions' && arg(3) === $node->vid) || (arg(2) === 'compare')) ? $node->vid : 0,
@@ -545,7 +538,7 @@ function diff_inline_form($form, $form_state, $node, $revisions) {
     ),
   );
   foreach ($revisions as $revision) {
-    $form['revision']['#options'][$revision->vid] = t('@revision by @name', array(
+    $form['compare']['#options'][$revision->vid] = t('@revision by @name', array(
       '@revision' => format_date($revision->timestamp, 'short'),
       '@name' => user_format_name($revision),
     ));
@@ -565,7 +558,7 @@ function diff_inline_form($form, $form_state, $node, $revisions) {
 function diff_inline_ajax($form, $form_state) {
   module_load_include('inc', 'diff', 'diff.pages');
   $node = $form['node']['#value'];
-  $vid = isset($form_state['values']['revision']) ? $form_state['values']['revision'] : 0;
+  $vid = isset($form_state['values']['compare']) ? $form_state['values']['compare'] : 0;
   return "<div id='node-{$node->nid}'>" . diff_inline_show($node, $vid) . "</div>";
 }
 
@@ -573,9 +566,9 @@ function diff_inline_ajax($form, $form_state) {
  * Form submission handler for diff_inline_form() for JS-disabled clients.
  */
 function diff_inline_form_submit(&$form, &$form_state) {
-  if (isset($form_state['values']['revision'], $form_state['values']['node'])) {
+  if (isset($form_state['values']['compare'], $form_state['values']['node'])) {
     $node = $form_state['values']['node'];
-    $vid = $form_state['values']['revision'];
+    $vid = $form_state['values']['compare'];
     $form_state['redirect'] = "node/{$node->nid}/compare/{$vid}/" . $node->vid;
   }
 }
